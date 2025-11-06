@@ -1,4 +1,3 @@
-
 package com.proyecto_vm.domain;
 
 import jakarta.persistence.*;
@@ -8,12 +7,12 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "doctor")
+public class Doctor implements Serializable {
 
-public class Doctor implements Serializable{
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
     private String especialidad;
     private int experiencia;
@@ -23,10 +22,16 @@ public class Doctor implements Serializable{
     private String contacto;
     private String horario;
     private String descripcion;
+
     
+    private String pacientes;
+
     public Doctor() {}
-    
-     public Doctor(Long id, String nombre, String especialidad, int experiencia, double tarifa, int disponibilidad, int estado, String contacto, String horario, String descripcion) {
+
+   
+    public Doctor(Long id, String nombre, String especialidad, int experiencia, double tarifa,
+                  int disponibilidad, int estado, String contacto, String horario,
+                  String descripcion, String pacientes) {
         this.id = id;
         this.nombre = nombre;
         this.especialidad = especialidad;
@@ -37,5 +42,14 @@ public class Doctor implements Serializable{
         this.contacto = contacto;
         this.horario = horario;
         this.descripcion = descripcion;
+        this.pacientes = pacientes; 
+    }
+
+    
+    public Doctor(Long id, String nombre, String especialidad, int experiencia, double tarifa,
+                  int disponibilidad, int estado, String contacto, String horario,
+                  String descripcion) {
+        this(id, nombre, especialidad, experiencia, tarifa, disponibilidad, estado,
+             contacto, horario, descripcion, null);
     }
 }

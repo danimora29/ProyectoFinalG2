@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #C6DDF0;
+    color: #062534;
+    padding: 20px;
+}
+
+h1 {
+    color: #0A2239;
+    text-align: center;
+}
+
+.doctores-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.doctor-card {
+    display: flex;
+    background-color: #EDD9A3;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 400px;
+}
+
+.doctor-photo img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.doctor-info {
+    padding: 15px;
+    flex: 1;
+}
+
+.doctor-name {
+    color: #D36135;
+    margin: 0;
+}
+
+.doctor-specialty {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.doctor-experience,
+.doctor-tarifa,
+.doctor-stock,
+.doctor-pacientes,
+.doctor-estado,
+.doctor-contacto {
+    margin: 3px 0;
+}
+
+.doctor-estado {
+    color: #0A2239;
+    font-weight: bold;
+}

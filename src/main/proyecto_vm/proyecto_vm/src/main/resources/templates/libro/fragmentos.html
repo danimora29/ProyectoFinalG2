@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/plantilla :: head}"/>
+
+    <body>
+        <!-- Fragmento 1: Agregar libro en ventana modal -->
+        <section th:fragment="agregar">
+            <div class='row py-4 mb-2 'style="background-color: #EDD9A3";>
+                <div class='col-md-1'></div>
+                <div class='col-md-3'>
+                    <button type="button" class="btn text-white" style="background-color: #0A2239;" sec:authorize="hasRole('ROLE_ADMIN')"
+                            data-bs-toggle="modal" data-bs-target="#agregarLibroModal">
+                        <i class="fa-solid fa-plus"></i> [[#{libro.agregar}]]
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal agregar libro -->
+            <div class="modal fade" id="agregarLibroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                <i class="fa-solid fa-book"></i> [[#{libro.agregar}]]
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action='@{/libro/guardar}' th:object='${libro}'
+                              class='was-validated' enctype="multipart/form-data" method="post">
+                            <div class="modal-body">
+                                <div class='mb-3'>
+                                    <label>[[#{libro.titulo}]]</label>
+                                    <input type="text" name='titulo' class='form-control' required="true"/>
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{libro.descripcion}]]</label>
+                                    <input type="text" name="descripcion" class="form-control" required="true"/>
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{libro.activo}]]</label>
+                                    <input type="checkbox" name='activo' class="form-check-input"/>
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{libro.imagen}]]</label>
+                                    <input type="file" name='imagenFile' onchange='mostrarImagen(this);' class='form-control'/>
+                                    <img id='blah' src='#' alt='imagen del libro' height="200"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento 2: Listado de libros -->
+        <section th:fragment="listado" class="p-3">
+            <div class="row p-3">
+                <div class="col-md-9">
+                    <div class="card p-2">
+                        <div class="card-header"><h4>[[#{libro.listado}]]</h4></div>
+                        <div class="card-body">
+                            <div th:if="${libros != null and !libros.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>[[#{libro.titulo}]]</th>
+                                            <th>[[#{libro.descripcion}]]</th>
+                                            <th>[[#{libro.imagen}]]</th>
+                                            <th>[[#{libro.activo}]]</th>
+                                            <th>[[#{accion.acciones}]]</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="l : ${libros}">
+                                            <td>[[${l.idLibro}]]</td>
+                                            <td>[[${l.titulo}]]</td>
+                                            <td>[[${l.descripcion}]]</td>
+                                            <td><img th:src="@{/${l.rutaImagen}}" height="150" class="rounded shadow-sm"/></td>
+                                            <td th:text="${l.activo} ? 'Activo':'Inactivo'"></td>
+                                            <td>
+                                                <a th:href="@{/libro/modificar/}+${l.idLibro}" class="btn btn-sm me-1" style="background-color: 
+                                                   #EDD9A3; ">
+                                                    <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                                </a>
+                                                <button type="button" class="btn btn-sm" style="background-color: #D36135; color: white!important"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmModal"
+                                                        th:data-bs-id="${l.idLibro}"
+                                                        th:data-bs-descripcion="${l.titulo}">
+                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                                </button>                                          
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${libros == null or libros.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center text-white mb-3" style="background-color: #625834;">
+                        <div class="card-body">
+                            <h3>[[#{libro.total}]]</h3>
+                            <h4 class="fs-2"><i class="fas fa-book"></i> [[${totalLibros}]]</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento 3: Editar libro -->
+        <section th:fragment="editar">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST" th:action="@{/libro/guardar}" 
+                          th:object="${libro}" class="was-validated" enctype="multipart/form-data">
+                        <input type="hidden" name="idLibro" th:field="*{idLibro}"/>
+                        <input type="hidden" name="rutaImagen" th:field="*{rutaImagen}"/>
+                        <div class="row py-4 mb-4 bg-light">
+                            <div class="col-md-4 d-grid">
+                                <a th:href="@{/libro/listado}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                </a>
+                            </div>                                
+                            <div class="col-md-4 d-grid">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                </button>
+                            </div>
+                        </div>                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header"><h4>[[#{accion.actualizar}]]</h4></div>
+                                    <div class="card-body">
+                                        <label for="descripcion">[[#{libro.descripcion}]]</label>
+                                        <input type="text" class="form-control" name="descripcion" 
+                                               th:field="*{descripcion}" required="true"/>
+                                        <div class="mb-3">
+                                            <label for="titulo">[[#{libro.titulo}]]</label>
+                                            <input type="text" class="form-control" name="titulo" 
+                                                   th:field="*{titulo}" required="true"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="activo">[[#{libro.activo}]]</label>
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="activo" id="activo" th:field="*{activo}"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="imagen">[[#{libro.imagen}]]</label>
+                                            <input class="form-control" type="file" name="imagenFile"
+                                                   onchange="mostrarImagen(this);" />
+                                            <img id="blah" th:src="@{${libro.rutaImagen}}" alt="your image" height="200"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade" 
+                 id="confirmModal" 
+                 tabindex="-1" 
+                 aria-labelledby="modalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/libro/eliminar}" th:object="${libro}" method="post">
+                            <input type="hidden" name="idLibro" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn" style="background-color: #D36135">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Fragmento: Mostrar mensajes tipo Toast -->
+        <section th:fragment="mostrarToast">
+            <div aria-live="polite" aria-atomic="true" 
+                 class="position-fixed top-50 start-50 translate-middle" 
+                 style="z-index: 1080;">                
+
+                <!-- Toast de error -->
+                <div th:if="${error}" class="toast show shadow-lg border-0"
+                     role="alert"
+                     aria-live="assertive"
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-danger">
+                        <i class="fa-solid fa-bomb me-2"></i>
+                        <strong class="me-auto">[[#{error}]]</strong>
+                        <button type="button" class="btn-close btn-close-white ms-2" 
+                                data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body bg-light text-dark">
+                        <p>[[${error}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm" 
+                                    data-bs-dismiss="toast">
+                                <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast de éxito -->
+                <div th:if="${todoOk}" class="toast show shadow-lg border-0"
+                     role="status"
+                     aria-live="polite"
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-success">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        <strong class="me-auto">[[#{atencion}]]</strong>
+                        <button type="button" class="btn-close btn-close-white ms-2" 
+                                data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body bg-light text-dark">
+                        <p>[[${todoOk}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm" 
+                                    data-bs-dismiss="toast">
+                                <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </body>
+</html>
+

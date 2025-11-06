@@ -1,0 +1,11 @@
+com\proyecto_vm\repository\LibroRepository.class
+com\proyecto_vm\controller\DoctorController.class
+com\proyecto_vm\repository\DoctorRepository.class
+com\proyecto_vm\ProyectoApplication.class
+com\proyecto_vm\service\LibroService.class
+com\proyecto_vm\controller\ConsultasController.class
+com\proyecto_vm\domain\Doctor.class
+com\proyecto_vm\domain\Libro.class
+com\proyecto_vm\ProjectConfig.class
+com\proyecto_vm\controller\LibroController.class
+com\proyecto_vm\service\DoctorService.class

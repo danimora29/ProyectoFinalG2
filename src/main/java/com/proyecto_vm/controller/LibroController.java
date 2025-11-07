@@ -35,7 +35,7 @@ public class LibroController {
         model.addAttribute("libros", libro);
         model.addAttribute("totalLibros", libro.size());
 
-        return "/libro/listado";
+        return "libro/listado";
     }
     @Autowired
     private MessageSource messageSource;

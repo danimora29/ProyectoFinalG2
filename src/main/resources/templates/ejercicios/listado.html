@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"      
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <head th:replace="~{general/fragmentos :: head}"/>
+    
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <div class="container my-5">
+            <h1 class="mb-4">
+                <i class="fa-solid fa-heart-pulse"></i> [[#{menu.ejerciciosCardio}]]
+            </h1>
+            
+            <a class="btn btn-success mb-3" th:href="@{/ejercicios/nuevo}">
+                <i class="fas fa-plus"></i> Agregar Nuevo Ejercicio
+            </a>
+            
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Duración (min)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ejercicio : ${ejercicios}">
+                        <td th:text="${ejercicio.id}">1</td>
+                        <td th:text="${ejercicio.nombre}">Trotar</td>
+                        <td th:text="${ejercicio.duracionMinutos}">30</td>
+                        <td>
+                            <a th:href="@{/ejercicios/editar/} + ${ejercicio.id}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a th:href="@{/ejercicios/eliminar/} + ${ejercicio.id}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div th:if="${ejercicios == null or ejercicios.empty}" class="alert alert-info" role="alert">
+                No hay ejercicios registrados.
+            </div>
+        </div>
+        
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

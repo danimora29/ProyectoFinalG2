@@ -3,15 +3,21 @@ package com.proyecto_vm.domain;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "doctor")
+@NoArgsConstructor // Constructor vacío para JPA
+@AllArgsConstructor // Constructor con todos los campos
 public class Doctor implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer idDoctor; // ID cambiado a Integer para persistencia
 
     private String nombre;
     private String especialidad;
@@ -22,34 +28,5 @@ public class Doctor implements Serializable {
     private String contacto;
     private String horario;
     private String descripcion;
-
-    
     private String pacientes;
-
-    public Doctor() {}
-
-   
-    public Doctor(Long id, String nombre, String especialidad, int experiencia, double tarifa,
-                  int disponibilidad, int estado, String contacto, String horario,
-                  String descripcion, String pacientes) {
-        this.id = id;
-        this.nombre = nombre;
-        this.especialidad = especialidad;
-        this.experiencia = experiencia;
-        this.tarifa = tarifa;
-        this.disponibilidad = disponibilidad;
-        this.estado = estado;
-        this.contacto = contacto;
-        this.horario = horario;
-        this.descripcion = descripcion;
-        this.pacientes = pacientes; 
-    }
-
-    
-    public Doctor(Long id, String nombre, String especialidad, int experiencia, double tarifa,
-                  int disponibilidad, int estado, String contacto, String horario,
-                  String descripcion) {
-        this(id, nombre, especialidad, experiencia, tarifa, disponibilidad, estado,
-             contacto, horario, descripcion, null);
-    }
 }

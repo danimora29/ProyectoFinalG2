@@ -2,7 +2,6 @@ package com.proyecto_vm.service;
 
 import com.proyecto_vm.repository.LibroRepository;
 import com.proyecto_vm.domain.Libro;
-import jakarta.validation.Path;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class LibroService {
 
     @Autowired
-
     private LibroRepository libroRepository;
 
     @Transactional(readOnly = true)
@@ -52,17 +50,32 @@ public class LibroService {
         } catch (DataIntegrityViolationException e) {
             throw new IllegalStateException("No se puede eliminar el libro: " + idLibro + e);
         }
-
     }
 
     @Transactional
     public void save(Libro libro, MultipartFile imagenFile) {
         if (imagenFile != null && !imagenFile.isEmpty()) {
-            
+             try {
+                 String nombreArchivo = imagenFile.getOriginalFilename();
+                 java.nio.file.Path rutaAbsoluta = Paths.get("src/main/resources/static/imagenes/libros/");
+                 
+                 if (!Files.exists(rutaAbsoluta)) {
+                     Files.createDirectories(rutaAbsoluta);
+                 }
+                 
+                 Files.copy(imagenFile.getInputStream(), rutaAbsoluta.resolve(nombreArchivo), StandardCopyOption.REPLACE_EXISTING);
+                 
+                 libro.setRutaImagen("/imagenes/libros/" + nombreArchivo);
+                 
+             } catch (IOException e) {
+                 System.err.println("Error al guardar la imagen: " + e.getMessage());
+             }
+        } else if (libro.getIdLibro() != null) {
+            libroRepository.findById(libro.getIdLibro()).ifPresent(
+                existingLibro -> libro.setRutaImagen(existingLibro.getRutaImagen())
+            );
+        }
         
-
         libroRepository.save(libro);
     }
-
-}
 }

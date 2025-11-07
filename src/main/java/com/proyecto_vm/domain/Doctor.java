@@ -9,8 +9,8 @@ import lombok.AllArgsConstructor;
 @Data
 @Entity
 @Table(name = "doctor")
-@NoArgsConstructor // Constructor vacío para JPA
-@AllArgsConstructor // Constructor con todos los campos
+@NoArgsConstructor
+@AllArgsConstructor
 public class Doctor implements Serializable {
 
     private static final long serialVersionUID = 1L;

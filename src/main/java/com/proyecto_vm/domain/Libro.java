@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 /**
  *
@@ -12,14 +14,17 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name="libro")
-
+@NoArgsConstructor 
+@AllArgsConstructor 
 public class Libro implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idLibro;
+    
     private String titulo;
+    private String autor;
     
     @Column(unique = true, nullable =false, length=50)
     @NotNull
@@ -31,6 +36,4 @@ public class Libro implements Serializable {
     @Size(max = 1024)
     private String rutaImagen;
     private Boolean activo;
-    
-    
 }

@@ -2,10 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <head th:replace="~{general/plantilla :: head}"/>
+    <head th:replace="~{general/fragmentos :: head}"/>
 
     <body>
-        <!-- Fragmento 1: Agregar libro en ventana modal -->
         <section th:fragment="agregar">
             <div class='row py-4 mb-2 'style="background-color: #EDD9A3";>
                 <div class='col-md-1'></div>
@@ -17,7 +16,6 @@
                 </div>
             </div>
 
-            <!-- Modal agregar libro -->
             <div class="modal fade" id="agregarLibroModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -35,8 +33,16 @@
                                     <input type="text" name='titulo' class='form-control' required="true"/>
                                 </div>
                                 <div class='mb-3'>
+                                    <label>Autor</label>
+                                    <input type="text" name='autor' class='form-control' required="true"/>
+                                </div>
+                                <div class='mb-3'>
                                     <label>[[#{libro.descripcion}]]</label>
                                     <input type="text" name="descripcion" class="form-control" required="true"/>
+                                </div>
+                                <div class='mb-3'>
+                                    <label>[[#{libro.precio}]]</label>
+                                    <input type="number" name="precio" class="form-control" step="0.01" required="true"/>
                                 </div>
                                 <div class='mb-3'>
                                     <label>[[#{libro.activo}]]</label>
@@ -62,7 +68,6 @@
             </div>
         </section>
 
-        <!-- Fragmento 2: Listado de libros -->
         <section th:fragment="listado" class="p-3">
             <div class="row p-3">
                 <div class="col-md-9">
@@ -75,7 +80,9 @@
                                         <tr>
                                             <th>#</th>
                                             <th>[[#{libro.titulo}]]</th>
+                                            <th>Autor</th>
                                             <th>[[#{libro.descripcion}]]</th>
+                                            <th>[[#{libro.precio}]]</th>
                                             <th>[[#{libro.imagen}]]</th>
                                             <th>[[#{libro.activo}]]</th>
                                             <th>[[#{accion.acciones}]]</th>
@@ -83,10 +90,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="l : ${libro}">
+                                        <tr th:each="l : ${libros}">
                                             <td>[[${l.idLibro}]]</td>
                                             <td>[[${l.titulo}]]</td>
+                                            <td>[[${l.autor}]]</td>
                                             <td>[[${l.descripcion}]]</td>
+                                            <td>[[${l.precio}]]</td>
                                             <td><img th:src="@{${l.rutaImagen}}" alt="noData" height="75"/></td>
                                             <td th:text="${l.activo} ? 'Activo':'Inactivo'"></td>
                                             <td>
@@ -99,8 +108,7 @@
                                                         th:data-bs-id="${l.idLibro}"
                                                         th:data-bs-descripcion="${l.titulo}">
                                                     <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                                                </button>                                          
-
+                                                </button>                                        
                                             </td>
                                         </tr>
                                     </tbody>
@@ -123,7 +131,6 @@
             </div>
         </section>
 
-        <!-- Fragmento 3: Editar libro -->
         <section th:fragment="editar">
             <div class="row">
                 <div class="col-md-2"></div>
@@ -137,13 +144,13 @@
                                 <a th:href="@{/libro/listado}" class="btn btn-primary">
                                     <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
                                 </a>
-                            </div>                                
+                            </div>                      
                             <div class="col-md-4 d-grid">
                                 <button type="submit" class="btn btn-success">
                                     <i class="fas fa-check"></i> [[#{accion.guardar}]]
                                 </button>
                             </div>
-                        </div>                        
+                        </div>                      
                         <div class="row">
                             <div class="col">
                                 <div class="card">
@@ -156,6 +163,16 @@
                                             <label for="titulo">[[#{libro.titulo}]]</label>
                                             <input type="text" class="form-control" name="titulo" 
                                                    th:field="*{titulo}" required="true"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="autor">Autor</label>
+                                            <input type="text" class="form-control" name="autor" 
+                                                   th:field="*{autor}" required="true"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="precio">[[#{libro.precio}]]</label>
+                                            <input type="number" class="form-control" name="precio" 
+                                                   th:field="*{precio}" step="0.01" required="true"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="activo">[[#{libro.activo}]]</label>
@@ -210,13 +227,11 @@
                 </div>
             </div>
         </section>
-        <!-- Fragmento: Mostrar mensajes tipo Toast -->
         <section th:fragment="mostrarToast">
             <div aria-live="polite" aria-atomic="true" 
                  class="position-fixed top-50 start-50 translate-middle" 
-                 style="z-index: 1080;">                
+                 style="z-index: 1080;">              
 
-                <!-- Toast de error -->
                 <div th:if="${error}" class="toast show shadow-lg border-0"
                      role="alert"
                      aria-live="assertive"
@@ -239,7 +254,6 @@
                     </div>
                 </div>
 
-                <!-- Toast de éxito -->
                 <div th:if="${todoOk}" class="toast show shadow-lg border-0"
                      role="status"
                      aria-live="polite"
@@ -266,4 +280,3 @@
         </section>
     </body>
 </html>
-

@@ -22,7 +22,7 @@ public class ProjectConfig implements WebMvcConfigurer {
     /* Los siguiente métodos son para implementar el tema de seguridad dentro del proyecto */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
+        // La ruta "/" ahora se maneja en AuthController para verificar sesión
         registry.addViewController("/ejemplo2").setViewName("ejemplo2");
         registry.addViewController("/multimedia").setViewName("multimedia");
         registry.addViewController("/iframes").setViewName("iframes");

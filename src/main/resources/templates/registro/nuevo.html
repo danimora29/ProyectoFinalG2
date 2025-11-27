@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <style>
+        body {
+            background-color: #C6DDF0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .register-container {
+            background-color: #EDD9A3;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .register-header h2 {
+            color: #0A2239;
+            font-weight: bold;
+        }
+        .register-header i {
+            color: #D36135;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .form-label {
+            color: #0A2239;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            border: 2px solid #062534;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+        .form-control:focus {
+            border-color: #D36135;
+            box-shadow: 0 0 0 0.2rem rgba(211, 97, 53, 0.25);
+        }
+        .btn-register {
+            background-color: #D36135;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-weight: bold;
+            margin-bottom: 15px;
+            transition: background-color 0.3s;
+        }
+        .btn-register:hover {
+            background-color: #b84d2a;
+            color: white;
+        }
+        .btn-back {
+            background-color: #0A2239;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-back:hover {
+            background-color: #062534;
+            color: white;
+        }
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .password-help {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+    </style>
+    <body>
+        <div class="register-container">
+            <div class="register-header">
+                <i class="fa-solid fa-user-plus"></i>
+                <h2>Registro de Usuario</h2>
+                <p class="text-muted">Crea tu cuenta en BienestWeb</p>
+            </div>
+
+            <!-- Mensajes de error -->
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${error}"></span>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <form th:action="@{/registro/nuevo}" method="post">
+                <div class="mb-3">
+                    <label for="correo" class="form-label">
+                        <i class="fa-solid fa-envelope"></i> Correo Electrónico
+                    </label>
+                    <input type="email" 
+                           class="form-control" 
+                           id="correo" 
+                           name="correo" 
+                           placeholder="tu@correo.com" 
+                           required 
+                           autofocus>
+                </div>
+
+                <div class="mb-3">
+                    <label for="contraseña" class="form-label">
+                        <i class="fa-solid fa-lock"></i> Contraseña
+                    </label>
+                    <input type="password" 
+                           class="form-control" 
+                           id="contraseña" 
+                           name="contraseña" 
+                           placeholder="Mínimo 6 caracteres" 
+                           required>
+                    <div class="password-help">
+                        <i class="fa-solid fa-info-circle"></i> La contraseña debe tener al menos 6 caracteres
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="confirmarContraseña" class="form-label">
+                        <i class="fa-solid fa-lock"></i> Confirmar Contraseña
+                    </label>
+                    <input type="password" 
+                           class="form-control" 
+                           id="confirmarContraseña" 
+                           name="confirmarContraseña" 
+                           placeholder="Repite tu contraseña" 
+                           required>
+                </div>
+
+                <button type="submit" class="btn btn-register">
+                    <i class="fa-solid fa-user-check"></i> Registrar
+                </button>
+            </form>
+
+            <!-- Botón para volver al login -->
+            <a th:href="@{/login}" class="btn-back">
+                <i class="fa-solid fa-arrow-left"></i> Volver al Login
+            </a>
+        </div>
+    </body>
+</html>
+

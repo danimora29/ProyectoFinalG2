@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <style>
+        body {
+            background-color: #C6DDF0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+        }
+        .hash-container {
+            background-color: #EDD9A3;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hash-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        h2 {
+            color: #0A2239;
+        }
+    </style>
+    <body>
+        <div class="hash-container">
+            <h2>Hash Generado</h2>
+            <p><strong>Contraseña:</strong> <span th:text="${password}"></span></p>
+            <div class="hash-box">
+                <strong>Hash BCrypt:</strong><br/>
+                <code th:text="${hash}"></code>
+            </div>
+            <p>Usa este hash en el script SQL para actualizar la contraseña en la base de datos.</p>
+            <a th:href="@{/login}" class="btn btn-primary">Volver al Login</a>
+        </div>
+    </body>
+</html>
+

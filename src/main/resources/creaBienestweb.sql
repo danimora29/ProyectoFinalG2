@@ -80,3 +80,42 @@ INSERT INTO alimentacion (nombre, tipo, calorias, descripcion, ruta_imagen) VALU
 INSERT INTO contacto (nombre, correo, mensaje) VALUES
 ('Ana Torres', 'ana.torres@gmail.com', 'Gracias por sus consejos, me encantó la sección de nutrición.');
 
+CREATE TABLE roles (
+    id_rol INT NOT NULL AUTO_INCREMENT,
+    nombre_rol VARCHAR(50) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    contraseña VARCHAR(255) NOT NULL,
+    activo BOOLEAN DEFAULT TRUE,
+    PRIMARY KEY (id_rol)
+);
+
+INSERT INTO roles (nombre_rol, correo, contraseña) VALUES
+('administrador', 'admin@bienestweb.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+('doctor', 'doctor@bienestweb.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+('usuario', 'usuario@bienestweb.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+
+-- IMPORTANTE: Los hashes de contraseña anteriores pueden no funcionar correctamente
+-- Para generar hashes correctos, usa el endpoint: http://localhost/admin/generar-hash?password=TU_CONTRASEÑA
+-- Luego actualiza los hashes usando los siguientes UPDATE statements:
+
+-- Actualizar contraseña del administrador (admin123)
+-- Reemplaza 'HASH_GENERADO_AQUI' con el hash generado para admin123
+UPDATE roles 
+SET contraseña = '$2a$10$7ZZq16O1/8faWSmuvcEre.7W4hvk71DiteID6WlmzHdfY3qND/x5m' 
+WHERE correo = 'admin@bienestweb.com';
+
+-- Actualizar contraseña del doctor (doctor123)
+-- Reemplaza 'HASH_GENERADO_AQUI' con el hash generado para doctor123
+UPDATE roles 
+SET contraseña = '$2a$10$wXXTtjMf339GyFAWbTJAjeiIhHFkWgPC/KqYChYfxFlxsWFfCaEPW' 
+WHERE correo = 'doctor@bienestweb.com';
+
+-- Actualizar contraseña del usuario (usuario123)
+-- Reemplaza 'HASH_GENERADO_AQUI' con el hash generado para usuario123
+UPDATE roles 
+SET contraseña = '$2a$10$eXCoGr9KZq8kqJtMRKjcIOz0SbYEakEOpImL2NpABNd/V2/d4aesy' 
+WHERE correo = 'usuario@bienestweb.com';
+
+-- Asegurar que todos los roles estén activos
+UPDATE roles SET activo = TRUE WHERE activo IS NULL OR activo = FALSE;
+

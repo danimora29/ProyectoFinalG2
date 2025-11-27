@@ -31,4 +31,6 @@ public class Rol implements Serializable {
 
     @Column(name = "activo")
     private Boolean activo = true;
+    
+    
 }

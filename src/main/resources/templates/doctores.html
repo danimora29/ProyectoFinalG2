@@ -2,21 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"      
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    
+
     <head th:replace="~{general/fragmentos :: head}"/>
-    
+
     <body>
         <header th:replace="~{general/fragmentos :: header}"></header>
-        
+
         <div class="container my-5">
             <h1 class="mb-4">
                 <i class="fa-solid fa-user-doctor"></i> [[#{doctor.listado}]]
             </h1>
-            
+
             <a class="btn btn-success mb-3" th:href="@{/doctores/nuevo}">
                 <i class="fas fa-plus"></i> [[#{doctor.agregar}]]
             </a>
-            
+
             <table class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -45,27 +45,31 @@
                             <a th:href="@{/doctores/modificar/} + ${doctor.idDoctor}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a th:href="@{/doctores/eliminar/} + ${doctor.idDoctor}" 
-                               data-bs-toggle="modal" data-bs-target="#modalEliminar"
-                               class="btn btn-sm btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            <form th:action="@{/doctores/eliminar}" method="post"
+                                  style="display:inline;"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
+
+                                <input type="hidden" name="idDoctor" th:value="${doctor.idDoctor}">
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Eliminar
+                                    </button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            
+
             <div th:if="${doctores == null or doctores.empty}" class="alert alert-info" role="alert">
                 [[#{lista.vacia}]]
             </div>
-            
-            </div>
-        
+
+        </div>
+
         <footer th:replace="~{general/fragmentos :: footer}"></footer>
-        
+
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
         <script th:src="@{/js/rutinas.js}"></script>
-        
+
     </body>
 </html>

@@ -15,10 +15,20 @@ use bienestweb;
 CREATE TABLE doctor (
     id_doctor INT NOT NULL AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
+    experiencia INT,
     especialidad VARCHAR(100) NOT NULL,
+    tarifa double,
+    disponibilidad INT,
+    estado INT,
+    contacto VARCHAR(100),
+    horario VARCHAR(100),
+    descripcion TEXT,
+    pacientes varchar(100),
     telefono VARCHAR(20),
     correo VARCHAR(100),
     ruta_imagen VARCHAR(1024),
+    
+    
     PRIMARY KEY (id_doctor),
     activo BOOLEAN
 );

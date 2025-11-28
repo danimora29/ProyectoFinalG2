@@ -21,10 +21,10 @@ public class Doctor implements Serializable {
 
     private String nombre;
     private String especialidad;
-    private int experiencia;
-    private double tarifa;
-    private int disponibilidad;
-    private int estado;
+    private Integer experiencia;
+    private Double tarifa;
+    private Integer disponibilidad;
+    private Integer estado;
     private String contacto;
     private String horario;
     private String descripcion;

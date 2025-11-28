@@ -4,18 +4,13 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:replace="~{general/fragmentos :: head}"/>
 
-
     <body>
         <header th:replace="~{general/fragmentos :: header}"/>
-        
-        
-        <section th:replace="~{libro/fragmentos :: agregar}"/>
-        <section th:replace="~{libro/fragmentos :: editar}"/>
-        
-        <section th:replace="~{libro/fragmentos :: mostrarToast}"/>
-        
-        
-        <footer th:replace="~{general/fragmentos :: footer}"/>
+  
+        <section th:replace="~{doctores/fragmentos :: agregar}"></section>  
+        <section th:replace="~{doctores/fragmentos :: editar}"></section>
+        <section th:replace="~{doctores/fragmentos :: mostrarToast}"></section>
 
+        <footer th:replace="~{general/fragmentos :: footer}"/>
     </body>
 </html>

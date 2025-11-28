@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -23,19 +24,25 @@ public class DoctorController {
         return "doctores";
     }
 
+    @GetMapping("/doctores/listado")
+    public String listado(Model model) {
+        model.addAttribute("doctores", doctorService.getDoctores());
+        return "doctores/listado";  // <-- la vista
+    }
+
     @GetMapping("/doctores/nuevo")
     public String nuevoDoctor(Model model) {
         model.addAttribute("doctor", new Doctor());
-        return "doctores/modifica"; 
+        return "doctores/modifica";
     }
 
     @PostMapping("/doctores/guardar")
     public String guardarDoctor(Doctor doctor, RedirectAttributes redirectAttributes) {
         doctorService.save(doctor);
-        
+
         redirectAttributes.addFlashAttribute("toastType", "success");
-        redirectAttributes.addFlashAttribute("toastMessage", "Registro actualizado correctamente"); 
-        
+        redirectAttributes.addFlashAttribute("toastMessage", "Registro actualizado correctamente");
+
         return "redirect:/doctores";
     }
 
@@ -45,20 +52,30 @@ public class DoctorController {
         if (doctorOpt.isPresent()) {
             model.addAttribute("doctor", doctorOpt.get());
         }
-        return "doctores/modifica"; 
+        return "doctores/modifica";
     }
-    
-    @GetMapping("/doctores/eliminar/{idDoctor}")
-    public String eliminarDoctor(@PathVariable("idDoctor") Integer idDoctor, RedirectAttributes redirectAttributes) {
+
+    @PostMapping("/doctores/eliminar")
+    public String eliminarDoctor(@RequestParam Integer idDoctor, RedirectAttributes redirectAttributes) {
+
+        String titulo = "todoOk";
+        String mensaje = "doctor.eliminado";
+
         try {
             doctorService.delete(idDoctor);
-            redirectAttributes.addFlashAttribute("toastType", "success");
-            redirectAttributes.addFlashAttribute("toastMessage", "Registro eliminado correctamente");
+
+        } catch (IllegalArgumentException e) {
+            titulo = "error";
+            mensaje = "doctor.error01"; // Por ejemplo: no se encontró el doctor
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("toastType", "error");
-            redirectAttributes.addFlashAttribute("toastMessage", "Error al intentar eliminar el doctor.");
+            titulo = "error";
+            mensaje = "doctor.error03"; // Error desconocido
         }
-        
+
+        redirectAttributes.addFlashAttribute("titulo", titulo);
+        redirectAttributes.addFlashAttribute("mensaje", mensaje);
+
         return "redirect:/doctores";
     }
 }

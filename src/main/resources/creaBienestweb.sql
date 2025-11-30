@@ -7,7 +7,7 @@ CREATE database bienestweb
 
 create user 'usuario_proyecto'@'%' identified by 'proyecto_Clave.';
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON bienestweb.* TO 'usuario_proyecto'@'%';
+GRANT ALL PRIVILEGES ON bienestweb.* TO 'usuario_proyecto'@'%' WITH GRANT OPTION;
 flush privileges;
 
 use bienestweb;

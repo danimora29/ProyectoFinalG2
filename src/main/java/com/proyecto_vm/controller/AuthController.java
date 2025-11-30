@@ -16,18 +16,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping("/")
-    public String index(HttpSession session) {
-        // Si no está autenticado, redirigir al login
-        if (session.getAttribute("usuario") == null) {
-            return "redirect:/login";
-        }
-        return "index";
-    }
-
     @GetMapping("/login")
     public String mostrarLogin(HttpSession session) {
-        // Si ya está autenticado, redirigir al index
         if (session.getAttribute("usuario") != null) {
             return "redirect:/";
         }
@@ -66,7 +56,6 @@ public class AuthController {
             @RequestParam String confirmarContraseña,
             RedirectAttributes redirectAttributes) {
         
-        // Validaciones
         if (correo == null || correo.trim().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "El correo es obligatorio");
             return "redirect:/registro/nuevo";
@@ -97,12 +86,11 @@ public class AuthController {
         return "redirect:/login";
     }
     
-    // Endpoint temporal para generar hashes - ELIMINA ESTO DESPUÉS
     @GetMapping("/admin/generar-hash")
     public String generarHash(@RequestParam String password, Model model) {
         String hash = authService.generarHash(password);
         model.addAttribute("password", password);
         model.addAttribute("hash", hash);
-        return "hash-result"; // Vista simple para mostrar el hash
+        return "hash-result";
     }
 }

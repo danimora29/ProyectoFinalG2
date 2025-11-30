@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"      
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <head th:replace="~{general/fragmentos :: head}"/>
+    
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <div class="container my-5">
+            <section th:replace="~{general/fragmentos :: mostrarToast}"></section> 
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[${producto.idProducto} == null ? #{accion.agregar} : #{accion.actualizar}]] [[#{plantilla.tproducto}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" th:action="@{/productos/guardar}" th:object="${producto}" class="was-validated">
+
+                                <input type="hidden" th:field="*{idProducto}"/>
+
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">[[#{producto.descripcion}]]</label>
+                                    <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required/>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="detalle" class="form-label">[[#{producto.detalle}]]</label>
+                                    <textarea id="detalle" th:field="*{detalle}" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="categoria" class="form-label">[[#{plantilla.tproducto}]]</label>
+                                    <select id="categoria" th:field="*{categoria}" class="form-select" required>
+                                        <option th:each="cat : ${categorias}" 
+                                                th:value="${cat.idCategoria}" 
+                                                th:text="${cat.descripcion}"
+                                                th:selected="${cat.idCategoria == producto.categoria.idCategoria}">
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="precio" class="form-label">[[#{producto.precio}]]</label>
+                                        <input type="number" id="precio" th:field="*{precio}" class="form-control" step="0.01" required/>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="existencias" class="form-label">[[#{producto.existencias}]]</label>
+                                        <input type="number" id="existencias" th:field="*{existencias}" class="form-control" required/>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="activo" class="form-label">[[#{libro.activo}]]</label>
+                                    <input type="checkbox" id="activo" th:field="*{activo}" class="form-check-input"/>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-4">
+                                    <a th:href="@{/productos}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

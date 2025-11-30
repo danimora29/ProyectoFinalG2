@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"      
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    
+    <head th:replace="~{general/fragmentos :: head}"/>
+    
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <div class="container my-5">
+            <section th:replace="~{general/fragmentos :: mostrarToast}"></section> 
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[${categoria.idCategoria} == null ? #{accion.agregar} : #{accion.actualizar}]] [[#{plantilla.tproducto}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" th:action="@{/categorias/guardar}" th:object="${categoria}" class="was-validated">
+
+                                <input type="hidden" th:field="*{idCategoria}"/>
+
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">[[#{producto.descripcion}]]</label>
+                                    <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required/>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="activo" class="form-label">[[#{libro.activo}]]</label>
+                                    <input type="checkbox" id="activo" th:field="*{activo}" class="form-check-input"/>
+                                </div>
+
+                                <div class="d-flex justify-content-between mt-4">
+                                    <a th:href="@{/categorias}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

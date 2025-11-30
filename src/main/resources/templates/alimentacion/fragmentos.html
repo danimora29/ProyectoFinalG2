@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+    <section th:fragment="modificarAlimento">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <form method="POST" th:action="@{/alimentacion/guardar}"
+                      th:object="${alimento}" class="was-validated">
+
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="row py-4 mb-4 bg-light">
+                        <div class="col-md-4 d-grid">
+                            <a th:href="@{/alimentacion}" class="btn btn-primary">
+                                <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                            </a>
+                        </div>
+                        <div class="col-md-4 d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[${alimento.id} == null ? #{alimentacion.agregar} : #{alimentacion.modificar}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label>[[#{alimentacion.nombre}]]</label>
+                                <input type="text" th:field="*{nombre}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{alimentacion.calorias}]]</label>
+                                <input type="number" th:field="*{calorias}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{alimentacion.tipo}]]</label>
+                                <input type="text" th:field="*{tipo}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <section th:fragment="confirmarEliminar">
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form th:action="@{/alimentacion/eliminar}" method="post">
+                        <input type="hidden" name="id" id="modalId"> 
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="modalLabel">
+                                <i class="fa-solid fa-triangle-exclamation"></i> [[#{accion.confirmar}]]
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>[[#{accion.confirmar.texto1}]] <strong id="modalDescripcion"></strong>?</p>
+                            <h6>[[#{accion.confirmar.texto2}]]</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="fa-solid fa-xmark"></i> [[#{accion.cancelar}]]
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var confirmModal = document.getElementById('confirmModal');
+                if (confirmModal) { 
+                    confirmModal.addEventListener('show.bs.modal', function (event) {
+                        var button = event.relatedTarget;
+                        var id = button.getAttribute('data-bs-id');
+                        var descripcion = button.getAttribute('data-bs-descripcion');
+                        
+                        var modalIdInput = confirmModal.querySelector('#modalId');
+                        var modalDescripcion = confirmModal.querySelector('#modalDescripcion');
+
+                        modalIdInput.value = id;
+                        modalDescripcion.textContent = descripcion;
+                    });
+                }
+            });
+        </script>
+    </section>
+
+</html>

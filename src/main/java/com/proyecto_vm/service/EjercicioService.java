@@ -33,4 +33,5 @@ public class EjercicioService {
     public void delete(Long idEjercicio) {
         ejercicioRepository.deleteById(idEjercicio);
     }
+    
 }

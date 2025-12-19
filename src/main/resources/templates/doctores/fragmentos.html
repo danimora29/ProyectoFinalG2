@@ -27,46 +27,46 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form th:action="@{/doctores/guardar}" th:object="${doctor}"
-                              method="post" enctype="multipart/form-data" class="was-validated">
+                              method="post" class="was-validated">
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label>[[${doctor.nombre}]]</label>
-                                    <input type="text" name="nombre" class="form-control" required>
+                                    <label>[[#{doctor.nombre}]]</label>
+                                    <input type="text" name="nombre" class="form-control" required="true">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.especialidad}]]</label>
-                                    <input type="text" name="especialidad" class="form-control" required>
+                                    <label>[[#{doctor.especialidad}]]</label>
+                                    <input type="text" name="especialidad" class="form-control" required="true">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.experiencia}]] (años)</label>
+                                    <label>[[#{doctor.experiencia}]] (años)</label>
                                     <input type="number" name="experiencia" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.tarifa}]]</label>
+                                    <label>[[#{doctor.tarifa}]]</label>
                                     <input type="number" name="tarifa" step="0.01" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.disponibilidad}]]</label>
+                                    <label>[[#{doctor.disponibilidad}]]</label>
                                     <input type="number" name="disponibilidad" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.estado}]]</label>
+                                    <label>[[#{doctor.estado}]]</label>
                                     <input type="text" name="estado" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.contacto}]]</label>
+                                    <label>[[#{doctor.contacto}]]</label>
                                     <input type="text" name="contacto" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.Horario}]]</label>
+                                    <label>[[#{doctor.horario}]]</label>
                                     <input type="text" name="horario" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.descripcion}]]</label>
+                                    <label>[[#{doctor.descripcion}]]</label>
                                     <input type="text" name="descripcion" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label>[[${doctor.pacientes}]]</label>
+                                    <label>[[#{doctor.pacientes}]]</label>
                                     <input type="number" name="pacientes" class="form-control">
                                 </div>
                             </div>
@@ -83,25 +83,26 @@
                 </div>
             </div>
         </section>
+
         <section th:fragment="listado" class="p-3">
             <div class="row p-3">
                 <div class="col-md-9">
                     <div class="card p-2">
-                        <div class="card-header"><h4>Listado de Doctores</h4></div>
+                        <div class="card-header"><h4>[[#{doctor.listado}]]</h4></div>
                         <div class="card-body">
                             <div th:if="${doctores != null and !doctores.empty}">
                                 <table class="table table-striped table-hover">
-                                    <thead class="table-dark">
+                                    <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>[[${doctor.nombre}]]</th>
-                                            <th>[[${doctor.especialidad}]]</th>
-                                            <th>[[${doctor.tarifa}]]</th>
-                                            <th>[[${doctor.disponibilidad}]]</th>
-                                            <th>[[${doctor.pacientes}]]</th>
-                                            <th>[[${doctor.estado}]]</th>
-                                            <th>[[${doctor.contacto}]]</th>
-                                            <th>[[${doctor.acciones}]]</th>
+                                            <th>[[#{doctor.nombre}]]</th>
+                                            <th>[[#{doctor.especialidad}]]</th>
+                                            <th>[[#{doctor.tarifa}]]</th>
+                                            <th>[[#{doctor.disponibilidad}]]</th>
+                                            <th>[[#{doctor.pacientes}]]</th>
+                                            <th>[[#{doctor.estado}]]</th>
+                                            <th>[[#{doctor.contacto}]]</th>
+                                            <th>[[#{accion.acciones}]]</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -117,7 +118,7 @@
                                             <td>
                                                 <a th:href="@{/doctores/modificar/}+${d.idDoctor}"
                                                    class="btn btn-warning btn-sm me-1">
-                                                    <i class="fas fa-pencil-alt"></i>
+                                                    <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
                                                 </a>
 
                                                 <button type="button"
@@ -126,7 +127,7 @@
                                                         data-bs-target="#confirmModal"
                                                         th:data-bs-id="${d.idDoctor}"
                                                         th:data-bs-descripcion="${d.nombre}">
-                                                    <i class="fa-solid fa-trash"></i>
+                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
                                                 </button>
                                             </td>
                                         </tr>
@@ -137,24 +138,22 @@
                                  th:if="${doctores == null || doctores.empty}">
                                 <span>[[#{lista.vacia}]]</span>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card text-center text-white mb-3" style="background-color:#625834;">
                         <div class="card-body">
-                            <h3>Total Doctores</h3>
+                            <h3>[[#{doctor.total}]]</h3>
                             <h4 class="fs-2">
                                 <i class="fa-solid fa-user-doctor"></i> [[${totalDoctores}]]
                             </h4>
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </section>
+
         <section th:fragment="editar">
 
             <div class="row">
@@ -169,7 +168,7 @@
 
                         <div class="row py-4 mb-4 bg-light">
                             <div class="col-md-4 d-grid">
-                                <a th:href="@{/doctores}" class="btn btn-primary">
+                                <a th:href="@{/doctores/listado}" class="btn btn-primary">
                                     <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
                                 </a>
                             </div>
@@ -182,56 +181,56 @@
                         </div>
 
                         <div class="card">
-                            <div class="card-header"><h4>Editar Doctor</h4></div>
+                            <div class="card-header"><h4>[[#{accion.actualizar}]] [[#{doctor.singular}]]</h4></div>
                             <div class="card-body">
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.nombre}]]</label>
-                                    <input type="text" th:field="*{nombre}" class="form-control" required>
+                                    <label>[[#{doctor.nombre}]]</label>
+                                    <input type="text" th:field="*{nombre}" class="form-control" required="true">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.especialidad}]]</label>
-                                    <input type="text" th:field="*{especialidad}" class="form-control" required>
+                                    <label>[[#{doctor.especialidad}]]</label>
+                                    <input type="text" th:field="*{especialidad}" class="form-control" required="true">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.experiencia}]]</label>
+                                    <label>[[#{doctor.experiencia}]]</label>
                                     <input type="number" th:field="*{experiencia}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.tarifa}]]</label>
+                                    <label>[[#{doctor.tarifa}]]</label>
                                     <input type="number" th:field="*{tarifa}" step="0.01" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.disponibilidad}]]</label>
+                                    <label>[[#{doctor.disponibilidad}]]</label>
                                     <input type="number" th:field="*{disponibilidad}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.estado}]]</label>
+                                    <label>[[#{doctor.estado}]]</label>
                                     <input type="text" th:field="*{estado}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.contacto}]]</label>
+                                    <label>[[#{doctor.contacto}]]</label>
                                     <input type="text" th:field="*{contacto}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.Horario}]]</label>
+                                    <label>[[#{doctor.horario}]]</label>
                                     <input type="text" th:field="*{horario}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.descripcion}]]</label>
+                                    <label>[[#{doctor.descripcion}]]</label>
                                     <input type="text" th:field="*{descripcion}" class="form-control">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label>[[${doctor.pacientes}]]</label>
+                                    <label>[[#{doctor.pacientes}]]</label>
                                     <input type="number" th:field="*{pacientes}" class="form-control">
                                 </div>
 
@@ -243,20 +242,25 @@
                 </div>
             </div>
         </section>
+
         <section th:fragment="confirmarEliminar">
-            <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
+            <div class="modal fade"
+                 id="confirmModal"
+                 tabindex="-1"
+                 aria-labelledby="modalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
                         <form th:action="@{/doctores/eliminar}" method="post">
-                            <input type="hidden" name="idDoctor" id="modalId">
+                            <input type="hidden" name="idDoctor" id="modalId"/>
                             <div class="modal-header bg-warning text-white">
                                 <h5 class="modal-title" id="modalLabel">
-                                    <i class="fa-solid fa-triangle-exclamation"></i> [[#{accion.confirmar}]]
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                                <p>[[#{accion.confirmar.texto1}]] <strong id="modalDescripcion"></strong>?</p>
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
                                 <h6>[[#{accion.confirmar.texto2}]]</h6>
                             </div>
                             <div class="modal-footer">
@@ -264,51 +268,85 @@
                                     <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
                                 </button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cancelar}]]
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
                                 </button>
                             </div>
-
                         </form>
-
                     </div>
                 </div>
             </div>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var confirmModal = document.getElementById('confirmModal');
+                    if (confirmModal) {
+                        confirmModal.addEventListener('show.bs.modal', function (event) {
+                            var button = event.relatedTarget;
+                            var id = button.getAttribute('data-bs-id');
+                            var descripcion = button.getAttribute('data-bs-descripcion');
+                            
+                            var modalIdInput = confirmModal.querySelector('#modalId');
+                            var modalDescripcion = confirmModal.querySelector('#modalDescripcion');
 
+                            modalIdInput.value = id;
+                            modalDescripcion.textContent = descripcion;
+                        });
+                    }
+                });
+            </script>
         </section>
-        <section th:fragment="mostrarToast">
 
+        <section th:fragment="mostrarToast">
             <div aria-live="polite" aria-atomic="true"
                  class="position-fixed top-50 start-50 translate-middle"
-                 style="z-index:1080;">
+                 style="z-index: 1080;">
 
-                <!-- Toast Error -->
-                <div th:if="${error}" class="toast show shadow-lg border-0">
-                    <div class="toast-header bg-danger text-white">
+                <div th:if="${error}" class="toast show shadow-lg border-0"
+                     role="alert"
+                     aria-live="assertive"
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-danger">
                         <i class="fa-solid fa-bomb me-2"></i>
-                        <strong class="me-auto">Error</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                        <strong class="me-auto">[[#{error}]]</strong>
+                        <button type="button" class="btn-close btn-close-white ms-2"
+                                data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="toast-body bg-light text-dark">
                         <p>[[${error}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    data-bs-dismiss="toast">
+                                <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Toast Éxito -->
-                <div th:if="${todoOk}" class="toast show shadow-lg border-0">
-                    <div class="toast-header bg-success text-white">
-                        <i class="fa-solid fa-check me-2"></i>
-                        <strong class="me-auto">Listo</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                <div th:if="${todoOk}" class="toast show shadow-lg border-0"
+                     role="status"
+                     aria-live="polite"
+                     aria-atomic="true"
+                     data-bs-autohide="true">
+                    <div class="toast-header text-white bg-success">
+                        <i class="fa-solid fa-circle-check me-2"></i>
+                        <strong class="me-auto">[[#{atencion}]]</strong>
+                        <button type="button" class="btn-close btn-close-white ms-2"
+                                data-bs-dismiss="toast" aria-label="Close"></button>
                     </div>
                     <div class="toast-body bg-light text-dark">
                         <p>[[${todoOk}]]</p>
+                        <div class="mt-2 pt-2 border-top text-center">
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    data-bs-dismiss="toast">
+                                <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                            </button>
+                        </div>
                     </div>
                 </div>
 
             </div>
-
         </section>
-
     </body>
 
 </html>

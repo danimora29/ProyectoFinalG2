@@ -3,68 +3,127 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head th:replace="~{general/fragmentos :: head}">
-    <title>Consulta Doctores</title>
+    <title>[[#{menu.consultas}]]</title>
     <meta charset="UTF-8"/>
 </head>
 <body>
 <header th:replace="~{general/fragmentos :: header}"></header>
 
-<div class="container my-4">
-    <h1 class="mb-4">Consulta para la disponibilidad de los Doctores</h1>
+<div class="container my-5">
+    <h1 class="mb-4 text-center text-primary">[[#{menu.consultas}]]</h1>
+    <p class="lead text-center">Revisa la disponibilidad de nuestros servicios y productos en tiempo real.</p>
     
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Especialidad</th>
-                <th>Experiencia</th>
-                <th>Tarifa</th>
-                <th>Disponibilidad</th>
-                <th>Teléfono</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="doctor : ${doctores}">
-                <td th:text="${doctor.idDoctor}"></td>
-                <td th:text="${doctor.nombre}"></td>
-                <td th:text="${doctor.especialidad}"></td>
-                <td th:text="${doctor.experiencia}"></td>
-                <td th:text="${doctor.tarifa}"></td>
-                <td th:text="${doctor.disponibilidad}"></td>
-                <td th:text="${doctor.contacto}"></td>
-                <td th:text="${doctor.estado}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <h3 class="mt-5 mb-3">
+        <i class="fa-solid fa-user-doctor text-info"></i> [[#{menu.doctores}]] / Disponibilidad
+    </h3>
+    <div th:if="${doctores != null and !doctores.empty}">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>[[#{doctor.nombre}]]</th>
+                    <th>[[#{doctor.especialidad}]]</th>
+                    <th>[[#{doctor.tarifa}]]</th>
+                    <th>[[#{doctor.horario}]]</th>
+                    <th>[[#{doctor.estado}]]</th>
+                    <th>[[#{doctor.pacientes}]]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="doctor : ${doctores}">
+                    <td th:text="${doctor.nombre}"></td>
+                    <td th:text="${doctor.especialidad}"></td>
+                    <td th:text="${doctor.tarifa}"></td>
+                    <td th:text="${doctor.horario}"></td>
+                    <td th:text="${doctor.activo} ? #{texto.si} : #{texto.no}"></td>
+                    <td th:text="${doctor.pacientes}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${doctores == null or doctores.empty}" class="alert alert-info">
+        [[#{doctor.listado}]] [[#{lista.vacia}]].
+    </div>
+
+    <h3 class="mt-5 mb-3">
+        <i class="fa-solid fa-book text-success"></i> [[#{menu.librosAutoayuda}]] / Disponibilidad
+    </h3>
+    <div th:if="${libros != null and !libros.empty}">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>[[#{libro.titulo}]]</th>
+                    <th>[[#{libro.autor}]]</th>
+                    <th>[[#{libro.precio}]]</th>
+                    <th>[[#{libro.activo}]]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="libro : ${libros}">
+                    <td th:text="${libro.titulo}"></td>
+                    <td th:text="${libro.autor}"></td>
+                    <td th:text="${libro.precio}"></td>
+                    <td th:text="${libro.activo} ? #{texto.si} : #{texto.no}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${libros == null or libros.empty}" class="alert alert-info">
+        [[#{libro.listado}]] [[#{lista.vacia}]].
+    </div>
     
-    <h3 class="mt-5">Resultados de la consulta</h3>
-    <table class="table table-striped table-bordered mt-3">
-        <thead class="table-dark">
-            <tr>
-                <th>ID Consulta</th>
-                <th>Nombre Doctor</th>
-                <th>Especialidad</th>
-                <th>Tarifa</th>
-                <th>Paciente</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="consulta : ${consultas}">
-                <td th:text="${consulta.idConsulta}"></td>
-                <td th:text="${consulta.doctor.nombre}"></td>
-                <td th:text="${consulta.doctor.especialidad}"></td>
-                <td th:text="${consulta.doctor.tarifa}"></td>
-                <td th:text="${consulta.paciente.nombre}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <h3 class="mt-5 mb-3">
+        <i class="fa-solid fa-dumbbell text-warning"></i> [[#{menu.ejerciciosCardio}]] / Precio
+    </h3>
+    <div th:if="${ejercicios != null and !ejercicios.empty}">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>[[#{ejercicio.nombre}]]</th>
+                    <th>[[#{ejercicio.duracion}]] (min)</th>
+                    <th>[[#{libro.precio}]]</th>
+                    </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ejercicio : ${ejercicios}">
+                    <td th:text="${ejercicio.nombre}"></td>
+                    <td th:text="${ejercicio.duracionMinutos}"></td>
+                    <td th:text="${ejercicio.precio}"></td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ejercicios == null or ejercicios.empty}" class="alert alert-info">
+        [[#{ejercicio.listado}]] [[#{lista.vacia}]].
+    </div>
+
+    <h3 class="mt-5 mb-3">
+        <i class="fa-solid fa-apple-whole text-danger"></i> [[#{menu.alimentacion}]] / Precio y Nutrición
+    </h3>
+    <div th:if="${alimentos != null and !alimentos.empty}">
+        <table class="table table-striped table-hover table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>[[#{alimentacion.nombre}]]</th>
+                    <th>[[#{alimentacion.tipo}]]</th>
+                    <th>[[#{libro.precio}]]</th> 
+                    <th>[[#{alimentacion.calorias}]]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="alimento : ${alimentos}">
+                    <td th:text="${alimento.nombre}"></td>
+                    <td th:text="${alimento.tipo}"></td>
+                    <td th:text="${alimento.precio}"></td> 
+                    <td th:text="${alimento.calorias}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${alimentos == null or alimentos.empty}" class="alert alert-info">
+        [[#{alimentacion.listado}]] [[#{lista.vacia}]].
+    </div>
 </div>
 
 <footer th:replace="~{general/fragmentos :: footer}"></footer>
-
-<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>

@@ -17,7 +17,7 @@ public class Doctor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idDoctor; // ID cambiado a Integer para persistencia
+    private Integer idDoctor;
 
     private String nombre;
     private String especialidad;
@@ -29,4 +29,8 @@ public class Doctor implements Serializable {
     private String horario;
     private String descripcion;
     private String pacientes;
+    private String telefono;
+    private String correo;
+    private String rutaImagen;
+    private Boolean activo;
 }

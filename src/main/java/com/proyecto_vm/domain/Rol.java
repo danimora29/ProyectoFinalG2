@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "roles")
+@Table(name = "rol")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rol implements Serializable {
@@ -20,17 +20,6 @@ public class Rol implements Serializable {
     @Column(name = "id_rol")
     private Integer idRol;
 
-    @Column(name = "nombre_rol", nullable = false, length = 50)
-    private String nombreRol;
-
-    @Column(name = "correo", nullable = false, unique = true, length = 100)
-    private String correo;
-
-    @Column(name = "contraseña", nullable = false)
-    private String contraseña;
-
-    @Column(name = "activo")
-    private Boolean activo = true;
-    
-    
+    @Column(name = "nombre", nullable = false, length = 50, unique = true)
+    private String nombre;
 }

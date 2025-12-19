@@ -10,23 +10,23 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data 
+@Data
 @Entity
-@Table(name = "ejercicio") 
-@NoArgsConstructor 
-@AllArgsConstructor 
+@Table(name = "ejercicio")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ejercicio {
     
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    @Column(name = "id_ejercicio") 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_ejercicio")
     private Long id;
     
     @Column(name = "nombre")
     private String nombre;
     
-    @Column(name = "duracion") 
+    @Column(name = "duracion")
     private int duracionMinutos;
 
-    private double precio; 
+    private Double precio;
 }

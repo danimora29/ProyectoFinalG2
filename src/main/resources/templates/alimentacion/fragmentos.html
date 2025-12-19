@@ -3,98 +3,222 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-    <section th:fragment="modificarAlimento">
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <form method="POST" th:action="@{/alimentacion/guardar}"
-                      th:object="${alimento}" class="was-validated">
-
-                    <input type="hidden" th:field="*{id}"/>
-
-                    <div class="row py-4 mb-4 bg-light">
-                        <div class="col-md-4 d-grid">
-                            <a th:href="@{/alimentacion}" class="btn btn-primary">
-                                <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
-                            </a>
-                        </div>
-                        <div class="col-md-4 d-grid">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-check"></i> [[#{accion.guardar}]]
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>[[${alimento.id} == null ? #{alimentacion.agregar} : #{alimentacion.modificar}]]</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label>[[#{alimentacion.nombre}]]</label>
-                                <input type="text" th:field="*{nombre}" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>[[#{alimentacion.calorias}]]</label>
-                                <input type="number" th:field="*{calorias}" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>[[#{alimentacion.tipo}]]</label>
-                                <input type="text" th:field="*{tipo}" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        
+        <section th:fragment="agregar">
+            <div class='row py-4 mb-2' style="background-color: #EDD9A3;">
+                <div class='col-md-1'></div>
+                <div class='col-md-3'>
+                    <button type="button" class="btn text-white" style="background-color: #0A2239;" sec:authorize="hasRole('ROLE_ADMIN')"
+                            data-bs-toggle="modal" data-bs-target="#agregarAlimentoModal">
+                        <i class="fa-solid fa-plus"></i> [[#{alimentacion.agregar}]]
+                    </button>
+                </div>
             </div>
-        </div>
-    </section>
-    
-    <section th:fragment="confirmarEliminar">
-        <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form th:action="@{/alimentacion/eliminar}" method="post">
-                        <input type="hidden" name="id" id="modalId"> 
-                        <div class="modal-header bg-danger text-white">
-                            <h5 class="modal-title" id="modalLabel">
-                                <i class="fa-solid fa-triangle-exclamation"></i> [[#{accion.confirmar}]]
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            
+            <div class="modal fade" id="agregarAlimentoModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h1 class="modal-title fs-5">
+                                <i class="fa-solid fa-apple-whole"></i> [[#{alimentacion.agregar}]]
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="modal-body">
-                            <p>[[#{accion.confirmar.texto1}]] <strong id="modalDescripcion"></strong>?</p>
-                            <h6>[[#{accion.confirmar.texto2}]]</h6>
+                        <form th:action="@{/alimentacion/guardar}" th:object="${alimento}"
+                              method="post" class="was-validated">
+                            <div class="modal-body">
+                                <input type="hidden" th:field="*{id}" />
+
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.nombre}]]</label>
+                                    <input type="text" th:field="*{nombre}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.calorias}]]</label>
+                                    <input type="number" th:field="*{calorias}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.tipo}]]</label>
+                                    <input type="text" th:field="*{tipo}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{libro.precio}]]</label>
+                                    <input type="number" th:field="*{precio}" step="0.01" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section th:fragment="listado" class="p-3">
+            <div class="row p-3">
+                <div class="col-md-9">
+                    <div class="card p-2">
+                        <div class="card-header"><h4>[[#{menu.alimentacion}]]</h4></div>
+                        <div class="card-body">
+                            <div th:if="${alimentos != null and !alimentos.empty}">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>[[#{alimentacion.nombre}]]</th>
+                                            <th>[[#{alimentacion.calorias}]]</th>
+                                            <th>[[#{alimentacion.tipo}]]</th>
+                                            <th>[[#{libro.precio}]]</th>
+                                            <th>[[#{accion.acciones}]]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="alimento : ${alimentos}">
+                                            <td th:text="${alimento.id}"></td>
+                                            <td th:text="${alimento.nombre}"></td>
+                                            <td th:text="${alimento.calorias}"></td>
+                                            <td th:text="${alimento.tipo}"></td>
+                                            <td th:text="${alimento.precio}"></td>
+                                            <td>
+                                                <a th:href="@{/alimentacion/modificar/}+${alimento.id}" class="btn btn-warning btn-sm me-1">
+                                                    <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
+                                                </a>
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmModal"
+                                                        th:data-bs-id="${alimento.id}"
+                                                        th:data-bs-descripcion="${alimento.nombre}">
+                                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${alimentos == null or alimentos.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fa-solid fa-xmark"></i> [[#{accion.cancelar}]]
-                            </button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center text-white mb-3" style="background-color:#625834;">
+                        <div class="card-body">
+                            <h3>[[#{alimentacion.total}]]</h3>
+                            <h4 class="fs-2">
+                                <i class="fa-solid fa-apple-whole"></i> [[${totalAlimentos}]]
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="editar">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST" th:action="@{/alimentacion/guardar}"
+                          th:object="${alimento}" class="was-validated">
+
+                        <input type="hidden" th:field="*{id}"/>
+
+                        <div class="row py-4 mb-4 bg-light">
+                            <div class="col-md-4 d-grid">
+                                <a th:href="@{/alimentacion/listado}" class="btn btn-primary">
+                                    <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                                </a>
+                            </div>
+                            <div class="col-md-4 d-grid">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[${alimento.id} == null ? #{alimentacion.agregar} : #{alimentacion.modificar}]]</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.nombre}]]</label>
+                                    <input type="text" th:field="*{nombre}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.calorias}]]</label>
+                                    <input type="number" th:field="*{calorias}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{alimentacion.tipo}]]</label>
+                                    <input type="text" th:field="*{tipo}" class="form-control" required="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label>[[#{libro.precio}]]</label>
+                                    <input type="number" th:field="*{precio}" step="0.01" class="form-control" required="true">
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var confirmModal = document.getElementById('confirmModal');
-                if (confirmModal) { 
-                    confirmModal.addEventListener('show.bs.modal', function (event) {
-                        var button = event.relatedTarget;
-                        var id = button.getAttribute('data-bs-id');
-                        var descripcion = button.getAttribute('data-bs-descripcion');
-                        
-                        var modalIdInput = confirmModal.querySelector('#modalId');
-                        var modalDescripcion = confirmModal.querySelector('#modalDescripcion');
+        </section>
 
-                        modalIdInput.value = id;
-                        modalDescripcion.textContent = descripcion;
-                    });
-                }
-            });
-        </script>
-    </section>
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
+                    <div class="modal-content animate-slide-up">
+                        <form th:action="@{/alimentacion/eliminar}" method="post">
+                            <input type="hidden" name="id" id="modalId"/>
+                            <div class="modal-header bg-warning text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-circle-radiation"></i> [[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>[[#{accion.confirmar.texto1}]] <span id="modalDescripcion"></span>?</p>
+                                <h6>[[#{accion.confirmar.texto2}]]</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
+                                </button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var confirmModal = document.getElementById('confirmModal');
+                    if (confirmModal) {
+                        confirmModal.addEventListener('show.bs.modal', function (event) {
+                            var button = event.relatedTarget;
+                            var id = button.getAttribute('data-bs-id');
+                            var descripcion = button.getAttribute('data-bs-descripcion');
+                            
+                            var modalIdInput = confirmModal.querySelector('#modalId');
+                            var modalDescripcion = confirmModal.querySelector('#modalDescripcion');
 
+                            modalIdInput.value = id;
+                            modalDescripcion.textContent = descripcion;
+                        });
+                    }
+                });
+            </script>
+        </section>
+        
+    </body>
 </html>

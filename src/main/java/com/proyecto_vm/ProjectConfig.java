@@ -1,4 +1,5 @@
 package com.proyecto_vm;
+
 import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +13,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-
-import org.springframework.beans.factory.annotation.Value;
-
 
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
@@ -57,6 +55,7 @@ public class ProjectConfig implements WebMvcConfigurer {
         lci.setParamName("lang");
         return lci;
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registro){
         registro.addInterceptor(localeChangeInterceptor());
@@ -69,13 +68,4 @@ public class ProjectConfig implements WebMvcConfigurer {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
-       
-    //@Value("${firebase.json.path}")
-    //private String jsonPath;
-
-    //@Value("${firebase.json.file}")
-    //private String jsonFile;
-
-    
-
 }

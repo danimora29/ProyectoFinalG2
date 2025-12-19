@@ -1,7 +1,9 @@
 package com.proyecto_vm.service;
 
 import com.proyecto_vm.domain.Rol;
+import com.proyecto_vm.domain.Usuario;
 import com.proyecto_vm.repository.RolRepository;
+import com.proyecto_vm.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,33 +15,34 @@ import java.util.Optional;
 public class AuthService {
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private RolRepository rolRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
-    // Método auxiliar para generar hash (puedes usarlo para actualizar la BD)
     public String generarHash(String contraseña) {
         return passwordEncoder.encode(contraseña);
     }
 
     public boolean autenticar(String correo, String contraseña, HttpSession session) {
-        Optional<Rol> rolOpt = rolRepository.findByCorreo(correo);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByCorreo(correo);
         
-        if (rolOpt.isPresent()) {
-            Rol rol = rolOpt.get();
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
             
-            // Verificar que el usuario esté activo (si es null, considerarlo como activo)
-            Boolean activo = rol.getActivo();
-            if (activo == null) {
-                activo = true; // Si es null, considerar como activo
-            }
+            boolean activo = usuario.isActivo();
             
-            // Verificar contraseña
-            if (activo && passwordEncoder.matches(contraseña, rol.getContraseña())) {
-                // Guardar información del usuario en la sesión
-                session.setAttribute("usuario", rol);
-                session.setAttribute("rol", rol.getNombreRol());
-                session.setAttribute("correo", rol.getCorreo());
+            if (activo && passwordEncoder.matches(contraseña, usuario.getPassword())) {
+                session.setAttribute("usuario", usuario);
+                session.setAttribute("idUsuario", usuario.getIdUsuario());
+                session.setAttribute("correo", usuario.getCorreo());
+                
+                if (!usuario.getRoles().isEmpty()) {
+                    session.setAttribute("rol", usuario.getRoles().iterator().next().getNombre());
+                }
+                
                 return true;
             }
         }
@@ -47,20 +50,22 @@ public class AuthService {
     }
 
     public boolean registrar(String correo, String contraseña) {
-        // Verificar si el correo ya existe
-        if (rolRepository.existsByCorreo(correo)) {
+        if (usuarioRepository.existsByCorreo(correo)) {
             return false;
         }
 
-        // Crear nuevo usuario con rol "usuario"
-        Rol nuevoRol = new Rol();
-        nuevoRol.setCorreo(correo);
-        nuevoRol.setContraseña(passwordEncoder.encode(contraseña));
-        nuevoRol.setNombreRol("usuario");
-        nuevoRol.setActivo(true);
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setCorreo(correo);
+        nuevoUsuario.setPassword(passwordEncoder.encode(contraseña));
+        nuevoUsuario.setActivo(true);
+
+        Optional<Rol> rol = rolRepository.findByNombre("ROLE_USER");
+        if (rol.isPresent()) {
+            nuevoUsuario.getRoles().add(rol.get());
+        }
 
         try {
-            rolRepository.save(nuevoRol);
+            usuarioRepository.save(nuevoUsuario);
             return true;
         } catch (Exception e) {
             return false;
